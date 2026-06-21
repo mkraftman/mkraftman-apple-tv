@@ -1,4 +1,4 @@
-# Apple TV (extended)
+# Mkraftman Apple TV (extended)
 
 A custom-component fork of the built-in Home Assistant `apple_tv` integration that
 adds **programmatic user-account switching** alongside an updated pyatv bundle.
@@ -93,7 +93,7 @@ Nothing else in the upstream Python source has been altered.
 
 1. HACS → ⋮ menu → **Custom repositories**.
 2. Add `mkraftman/mkraftman-apple-tv` with category **Integration**.
-3. Find **Apple TV (extended)** in HACS and **Download**.
+3. Find **Mkraftman Apple TV** in HACS and **Download**.
 4. **Restart Home Assistant.** On boot, HA installs `pyatv==0.18.0` into the Core
    container and loads this custom component in place of the built-in one.
 
