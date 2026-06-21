@@ -63,6 +63,6 @@
       "type": "_raop._tcp.local."
     }
   ],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "issue_tracker": "https://github.com/mkraftman/mkraftman-apple-tv/issues"
 }

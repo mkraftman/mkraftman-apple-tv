@@ -6,11 +6,17 @@ from pyatv.interface import AppleTV as AppleTVInterface
 import voluptuous as vol
 
 from homeassistant.const import ATTR_CONFIG_ENTRY_ID
-from homeassistant.core import HomeAssistant, ServiceCall, callback
+from homeassistant.core import (
+    HomeAssistant,
+    ServiceCall,
+    ServiceResponse,
+    SupportsResponse,
+    callback,
+)
 from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers import config_validation as cv, service
 
-from .const import ATTR_TEXT, DOMAIN
+from .const import ATTR_ACCOUNT_ID, ATTR_TEXT, DOMAIN
 
 SERVICE_SET_KEYBOARD_TEXT = "set_keyboard_text"
 SERVICE_SET_KEYBOARD_TEXT_SCHEMA = vol.Schema(
@@ -32,6 +38,21 @@ SERVICE_CLEAR_KEYBOARD_TEXT = "clear_keyboard_text"
 SERVICE_CLEAR_KEYBOARD_TEXT_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    }
+)
+
+SERVICE_LIST_USER_ACCOUNTS = "list_user_accounts"
+SERVICE_LIST_USER_ACCOUNTS_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+    }
+)
+
+SERVICE_SWITCH_USER_ACCOUNT = "switch_user_account"
+SERVICE_SWITCH_USER_ACCOUNT_SCHEMA = vol.Schema(
+    {
+        vol.Required(ATTR_CONFIG_ENTRY_ID): cv.string,
+        vol.Required(ATTR_ACCOUNT_ID): cv.string,
     }
 )
 
@@ -105,6 +126,46 @@ async def _async_clear_keyboard_text(call: ServiceCall) -> None:
         ) from err
 
 
+async def _async_list_user_accounts(call: ServiceCall) -> ServiceResponse:
+    """List user accounts on an Apple TV."""
+    atv = _get_atv(call)
+    try:
+        accounts = await atv.user_accounts.account_list()
+    except NotSupportedError as err:
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="user_accounts_not_available",
+        ) from err
+    except ProtocolError as err:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="user_accounts_error",
+        ) from err
+    return {
+        "accounts": [
+            {"name": account.name, "identifier": account.identifier}
+            for account in accounts
+        ]
+    }
+
+
+async def _async_switch_user_account(call: ServiceCall) -> None:
+    """Switch to a user account on an Apple TV."""
+    atv = _get_atv(call)
+    try:
+        await atv.user_accounts.switch_account(call.data[ATTR_ACCOUNT_ID])
+    except NotSupportedError as err:
+        raise ServiceValidationError(
+            translation_domain=DOMAIN,
+            translation_key="user_accounts_not_available",
+        ) from err
+    except ProtocolError as err:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="user_accounts_error",
+        ) from err
+
+
 @callback
 def async_setup_services(hass: HomeAssistant) -> None:
     """Set up the services for the Apple TV integration."""
@@ -125,4 +186,17 @@ def async_setup_services(hass: HomeAssistant) -> None:
         SERVICE_CLEAR_KEYBOARD_TEXT,
         _async_clear_keyboard_text,
         schema=SERVICE_CLEAR_KEYBOARD_TEXT_SCHEMA,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_LIST_USER_ACCOUNTS,
+        _async_list_user_accounts,
+        schema=SERVICE_LIST_USER_ACCOUNTS_SCHEMA,
+        supports_response=SupportsResponse.ONLY,
+    )
+    hass.services.async_register(
+        DOMAIN,
+        SERVICE_SWITCH_USER_ACCOUNT,
+        _async_switch_user_account,
+        schema=SERVICE_SWITCH_USER_ACCOUNT_SCHEMA,
     )

@@ -87,6 +87,12 @@
     },
     "streaming_not_supported": {
       "message": "Streaming the requested media is not supported"
+    },
+    "user_accounts_error": {
+      "message": "An error occurred while communicating with the Apple TV user accounts service"
+    },
+    "user_accounts_not_available": {
+      "message": "User account management is not supported by this device"
     }
   },
   "options": {
@@ -124,6 +130,16 @@
       },
       "name": "Clear keyboard text"
     },
+    "list_user_accounts": {
+      "description": "Lists the user accounts that can be switched between on an Apple TV. Returns each account's name and identifier.",
+      "fields": {
+        "config_entry_id": {
+          "description": "[%key:component::apple_tv::services::set_keyboard_text::fields::config_entry_id::description%]",
+          "name": "[%key:component::apple_tv::services::set_keyboard_text::fields::config_entry_id::name%]"
+        }
+      },
+      "name": "List user accounts"
+    },
     "set_keyboard_text": {
       "description": "Sets the text in the currently focused text input field on an Apple TV.",
       "fields": {
@@ -137,6 +153,20 @@
         }
       },
       "name": "Set keyboard text"
+    },
+    "switch_user_account": {
+      "description": "Switches the currently active user account on an Apple TV. Use 'List user accounts' first to get the identifier.",
+      "fields": {
+        "account_id": {
+          "description": "The identifier of the user account to switch to (from 'List user accounts').",
+          "name": "Account identifier"
+        },
+        "config_entry_id": {
+          "description": "[%key:component::apple_tv::services::set_keyboard_text::fields::config_entry_id::description%]",
+          "name": "[%key:component::apple_tv::services::set_keyboard_text::fields::config_entry_id::name%]"
+        }
+      },
+      "name": "Switch user account"
     }
   }
 }

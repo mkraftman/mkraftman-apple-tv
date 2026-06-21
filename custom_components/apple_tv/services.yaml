@@ -29,3 +29,23 @@ clear_keyboard_text:
       selector:
         config_entry:
           integration: apple_tv
+
+list_user_accounts:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: apple_tv
+
+switch_user_account:
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: apple_tv
+    account_id:
+      required: true
+      selector:
+        text:

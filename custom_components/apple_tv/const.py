@@ -10,4 +10,5 @@ CONF_START_OFF = "start_off"
 SIGNAL_CONNECTED = "apple_tv_connected"
 SIGNAL_DISCONNECTED = "apple_tv_disconnected"
 
+ATTR_ACCOUNT_ID = "account_id"
 ATTR_TEXT = "text"
