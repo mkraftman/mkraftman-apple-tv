@@ -93,7 +93,7 @@ Nothing else in the upstream Python source has been altered.
 
 1. HACS → ⋮ menu → **Custom repositories**.
 2. Add `mkraftman/mkraftman-apple-tv` with category **Integration**.
-3. Find **Mkraftman Apple TV** in HACS and **Download**.
+3. Find **Mkraftman Apple TV (extended)** in HACS and **Download**.
 4. **Restart Home Assistant.** On boot, HA installs `pyatv==0.18.0` into the Core
    container and loads this custom component in place of the built-in one.
 
