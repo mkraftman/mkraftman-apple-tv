@@ -145,3 +145,7 @@ modifications described above. pyatv is authored by Pierre Ståhl and licensed M
 
 This is an unofficial, personal fork and is not affiliated with or endorsed by
 Home Assistant or the pyatv project.
+
+## Releasing
+
+Bump the version in both `VERSION` and `custom_components/apple_tv/manifest.json` (they must match) and push to `main`. The release workflow creates the matching `vX.Y.Z` tag and GitHub release, which HACS installs from.
